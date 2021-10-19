@@ -17,8 +17,10 @@ public class GreetingLambda implements RequestHandler<HashMap<String, Object>, A
         JsonObject object = JsonParser.parseString(s.toJson(input)).getAsJsonObject();
         String connectionId = object.get("requestContext").getAsJsonObject().get("connectionId").getAsString();
 
+//        String message = object.get("body").getAsJsonObject().get("connectionId").getAsString();
+        JsonObject mess=JsonParser.parseString(input.get("body").toString()).getAsJsonObject();
 
-
+        System.out.println(mess.get("data"));
         System.out.println(object);
 
         System.out.println(input.get("body"));
