@@ -16,9 +16,14 @@ public class GreetingLambda implements RequestHandler<HashMap<String, Object>, A
 
         JsonObject object = JsonParser.parseString(s.toJson(input)).getAsJsonObject();
         String connectionId = object.get("requestContext").getAsJsonObject().get("connectionId").getAsString();
-        String message= object.get("body").deepCopy().getAsJsonObject().getAsString();
 
-        System.out.println(message);
+
+
+        System.out.println(object);
+
+        System.out.println(input.get("body"));
+        System.out.println(input.get("body").getClass());
+
 
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setIsBase64Encoded(false);
