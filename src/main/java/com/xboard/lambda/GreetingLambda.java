@@ -1,8 +1,5 @@
 package com.xboard.lambda;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -32,13 +29,8 @@ public class GreetingLambda implements RequestHandler<APIGatewayV2WebSocketEvent
         String connectionId = object.get("requestContext").getAsJsonObject().get("connectionId").getAsString();
         JsonObject mess = JsonParser.parseString(input.getBody()).getAsJsonObject();
         System.out.println(mess.get("data"));
-        CredData credData = new CredData();
-        AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(
-                new BasicAWSCredentials(credData.getACCESS_KEY(),
-                        credData.getSECRET_KEY())
-        );
+
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(awsCredentialsProvider)
                 .withRegion("ap-south-1")
                 .build();
         DynamoDBMapper mapper = new DynamoDBMapper(client);
@@ -50,7 +42,7 @@ public class GreetingLambda implements RequestHandler<APIGatewayV2WebSocketEvent
             }
         }
         for (String cId : allConnectionId) {
-            ApiGatewayManagementApiClient apiGatewayManagementApiClient = null;
+            ApiGatewayManagementApiClient apiGatewayManagementApiClient;
             try {
                 apiGatewayManagementApiClient = ApiGatewayManagementApiClient.builder()
                         .endpointOverride(new URI("https://" + input.getRequestContext().getDomainName() + '/' + input.getRequestContext().getStage()))
