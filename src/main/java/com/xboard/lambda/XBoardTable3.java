@@ -1,25 +1,21 @@
 package com.xboard.lambda;
 
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
 
 
 @ToString
 @NoArgsConstructor
-@DynamoDBTable(tableName = "simplechat_connections")
+@DynamoDbBean
 public class XBoardTable3 {
-    @DynamoDBHashKey(attributeName = "connectionId")
     private String connectionId;
+    private String xboardpk;
 
-    @DynamoDBRangeKey(attributeName = "table")
-    @DynamoDBIndexHashKey(attributeName = "table",globalSecondaryIndexName = "table-index")
-    private String table;
-
+    @DynamoDbPartitionKey
     public String getConnectionId() {
         return connectionId;
     }
@@ -28,11 +24,14 @@ public class XBoardTable3 {
         this.connectionId = connectionId;
     }
 
-    public String getTable() {
-        return table;
+    @DynamoDbSecondaryPartitionKey(indexNames = {"xboardpk-index"})
+    public String getxboardpk() {
+        return xboardpk;
     }
 
-    public void setTable(String table) {
-        this.table = table;
+    public void setxboardpk(String xboardpk) {
+        this.xboardpk = xboardpk;
     }
+
+
 }
