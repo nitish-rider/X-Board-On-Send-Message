@@ -31,8 +31,6 @@ public class GreetingLambda implements RequestHandler<APIGatewayV2WebSocketEvent
         try {
             JsonNode jsonNode = objectMapper.readTree(input.getBody());
             String data = jsonNode.get("data").asText();
-            String tableName = "simplechat_connections";
-            String secParttitionIdx = "xboardpk-index";
             String secPartitionKeyVal = "simplechat_connections";
             DynamoDbClient ddb = DynamoDbClient.builder()
                     .build();
@@ -44,11 +42,10 @@ public class GreetingLambda implements RequestHandler<APIGatewayV2WebSocketEvent
             if(results!=null){
                 while (results.hasNext()) {
                     XBoardTable3 issue = results.next();
-                    System.out.println("The record description is " + issue.getConnectionId());
-                    System.out.println("The record title is " + issue.getxboardpk());
-                    if(!Objects.equals(issue.getConnectionId(), connectionId)){
-                        allConnectionId.add(issue.getConnectionId());
-                    }
+                    allConnectionId.add(issue.getConnectionId());
+                }
+                for(String cId : allConnectionId){
+                    System.out.println(cId);
                 }
                 for (String cId : allConnectionId) {
                     ApiGatewayManagementApiClient apiGatewayManagementApiClient;
